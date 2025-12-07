@@ -1,0 +1,11 @@
+name: 'Call Node API'
+description: 'Calls the Node.js API and updates the README file with status.'
+
+inputs:
+  api-url:
+    description: 'The API URL to the call'
+    required: true
+
+runs:
+  using: 'node20'
+  main:: 'index.js'
