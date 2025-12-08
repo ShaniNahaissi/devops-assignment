@@ -3,6 +3,10 @@ name: Call Node.js API and Update README file.
 on:
   workflow_dispatch:
 
+concurrency:
+  group: readme-update
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -12,18 +16,27 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        # actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 
+
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        # actions/setup-node@v4
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
         with:
           node-version: '22'
 
       - name: Install API dependencies
         run: npm install
 
+      - name: Run tests
+        run: npm test
+
       - name: Install action dependencies
-        run: cd .github/actions/call-node-api && npm install && npm run build
+        run: |
+          cd .github/actions/call-node-api
+          npm install
+          npm run build
 
       - name: Start API server
         run: npm start &    # means that it runs in the background   
@@ -41,14 +54,27 @@ jobs:
         # --fail: return error code is it fails
 
       - name: Call API and update README
+        id: api-call
         uses: ./.github/actions/call-node-api
         with:
           api-url: http://localhost:3000/status
+
+      - name: Verify API status
+        if: ${{ steps.api-call.outputs.status != 'ok' }}
+        run: |
+          echo "API returned unexpected status: $STATUS"
+          exit 1
+        env:
+          STATUS: ${{ steps.api-call.outputs.status }}
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m "Update README with API status" || echo "No changes to commit"
-          git push
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update README with API status"
+            git push
+          fi
