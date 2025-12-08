@@ -15,8 +15,10 @@ app.get('/status', (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`The server is running on port ${PORT}`);
-});
-
+// only listen when running directly, not during tests
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`The server is running on port ${PORT}`);
+    });
+};
 module.exports = app;
