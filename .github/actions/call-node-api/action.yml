@@ -6,6 +6,14 @@ inputs:
     description: 'The API URL to the call'
     required: true
 
+outputs:
+  status:
+    description: 'The API STATUS returned from the endpoint'
+  service:
+    description: 'The SERVICE NAME returned from the endpoint'
+  response-time-ms:
+    description: 'API response time in milliseconds'
+
 runs:
   using: 'node20'
   main: 'dist/index.js'
