@@ -25,7 +25,8 @@ async function callNodeApi() {
         }
 
         // generate markdown
-        const markdown = `## API Status
+        const markdown = 
+        `## API Status
         - **Status:** ${data.status}
         - **Service:** ${data.service}
         - **Timestamp:** ${data.timestamp}
