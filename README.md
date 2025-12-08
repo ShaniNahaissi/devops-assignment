@@ -28,4 +28,7 @@ A Node.js API with GitHub Actions automation.
 5. Changes are committed and pushed automatically
 
 <!-- API_STATUS_START -->
-<!-- API_STATUS_END -->
+## API Status
+        - **Status:** ok
+        - **Service:** devops-assignment
+        - **Timestamp:** 2025-12-08T12:02:22.744Z<!-- API_STATUS_END -->
