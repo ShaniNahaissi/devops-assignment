@@ -7,6 +7,14 @@ app.get('/health', (req, res) => {
     res.status(200).json({ healthy: true });
 });
 
+// middleware
+app.use((req, res) => {
+    res.status(404).json({ 
+        error: 'Not Found', 
+        path: req.path 
+    });
+});
+
 app.get('/status', (req, res) => {
     res.json({
         status: 'ok',
