@@ -77,5 +77,5 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Update README with API status"
-            git push origin ${{ github.ref_name }}
+            git push origin ${{ github.ref_name }} 
           fi
