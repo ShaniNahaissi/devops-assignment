@@ -27,9 +27,9 @@ async function callNodeApi() {
         // generate markdown
         const markdown =
         `## API Status
-        - **Status:** ok
-        - **Service:** devops-assignment
-        - **Timestamp:** 2025-12-08T12:02:22.744Z`;
+        - **Status:** ${data.status}
+        - **Service:** ${data.service}
+        - **Timestamp:** ${data.timestamp}`;
 
         core.info('Generated Markdown');
         core.info(markdown);
