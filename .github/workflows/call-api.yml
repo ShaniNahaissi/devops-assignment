@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Install action dependencies
-        run: cd .github/actions/call-node-api && npm install
+        run: cd .github/actions/call-node-api && npm install && npm run build
 
       - name: Start API server
         run: npm start &    # means that it runs in the background   
