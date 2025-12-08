@@ -15,6 +15,14 @@ app.get('/status', (req, res) => {
     });
 });
 
+// middleware
+app.use((req, res) => {
+    res.status(404).json({ 
+        error: 'Not Found', 
+        path: req.path 
+    });
+});
+
 // only listen when running directly, not during tests
 if (require.main === module) {
     app.listen(PORT, () => {

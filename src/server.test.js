@@ -27,3 +27,13 @@ describe('Status Endpoint', () => {
         expect(timestamp.toISOString()).toBe(response.body.timestamp);
     });
 });
+
+describe('404 Handling', () => {
+    it('should return 404 for unknown routes', async () => {
+        const response = await request(app).get('/unknown-route');
+
+        expect(response.status).toBe(404);
+        expect(response.body).toHaveProperty('error', 'Not Found');
+        expect(response.body).toHaveProperty('path', '/unknown-route');
+    });
+});
