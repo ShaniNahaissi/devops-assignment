@@ -142,4 +142,8 @@ The `call-node-api` action provides these outputs for use in subsequent steps:
 | `response-time-ms` | Response time in milliseconds |
 
 <!-- API_STATUS_START -->
+## API Status
+        - **Status:** ok
+        - **Service:** devops-assignment
+        - **Timestamp:** 2025-12-08T15:45:42.239Z
 <!-- API_STATUS_END -->
