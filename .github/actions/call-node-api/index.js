@@ -51,7 +51,7 @@ async function callNodeApi() {
         // replace content between markers
         const newContent =
             readmeContent.substring(0, startIndex + startMarker.length) + '\n' +
-            markdown + readmeContent.substring(endIndex);
+            markdown + '\n' + readmeContent.substring(endIndex);
 
         fs.writeFileSync(readmePath, newContent);
         core.info('README.md updated successfuly!');
