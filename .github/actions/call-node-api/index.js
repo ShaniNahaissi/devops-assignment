@@ -1,12 +1,31 @@
 const core = require('@actions/core')
 const fs = require('fs')
 const path = require('path');
-const { start } = require('repl');
 
 async function callNodeApi() {
-    try{
+    const startTime = Date.now();
+        try{
         // get the api url from inputs
         const apiUrl = core.getInput('api-url', { required: true});
+
+        // validate URL
+        try {
+            const url = new URL(apiUrl);
+            const allowedProtocols = ['http:', 'https:'];
+            const allowedHosts = ['localhost', '127.0.0.1'];
+
+            if (!allowedProtocols.includes(url.protocol)) {
+                throw new Error(`Invalid protocol: ${url.protocol}`);
+            }
+
+            if (!allowedHosts.includes(url.hostname)) {
+                core.warning(`Calling non-localhost URL: ${url.hostname}`);
+            }
+        } catch (urlError) {
+            core.setFailed(`Invalid API URL: ${urlError.message}`);
+            return;
+        }
+
         core.info(`Calling API: ${apiUrl}`)
 
         // call the api
@@ -17,7 +36,10 @@ async function callNodeApi() {
         };
 
         const data = await response.json()
+        const responseTime = Date.now() - startTime;
+
         core.info(`API Response: ${JSON.stringify(data)}`);
+        core.info(`Response time: ${responseTime}ms`);
 
         // validate the response
         if (!data.status || !data.service || !data.timestamp){
@@ -55,6 +77,24 @@ async function callNodeApi() {
 
         fs.writeFileSync(readmePath, newContent);
         core.info('README.md updated successfuly!');
+
+        // set outputs
+        core.setOutput('status', data.status);
+        core.setOutput('service', data.service);
+        core.setOutput('response-time-ms', responseTime);
+
+        // job summary
+        await core.summary
+            .addHeading('API Status Check Results')
+            .addTable([
+                [{ data: 'Field', header: true }, { data: 'Value', header: true }],
+                ['Status', data.status],
+                ['Service', data.service],
+                ['Timestamp', data.timestamp],
+                ['Response Time', `${responseTime}ms`]
+            ])
+            .addLink('View README', `https://github.com/${process.env.GITHUB_REPOSITORY}/blob/main/README.md`)
+            .write();
 
     } catch (error) {
         core.setFailed(`Action failed ${error.message}`);
